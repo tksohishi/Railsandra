@@ -1,0 +1,42 @@
+# JSON-like Casssandra Schema for Railsandra
+
+# Push Type? from http://labs.cybozu.co.jp/blog/kazuhoatwork/2008/06/implementing_timeline_in_web_s.php
+
+# Keyspaces
+
+User: {            # Column Family (Standard, UTF8Type)
+  <UserUUID>: {    # Row Key
+    <Username>: {      # Column Key
+      password_hashed: "fdhaflksd",
+      salt: "asfdt",
+      name: "Takeshi Ohishi",
+      bod: "5/8/1985",
+      ...
+    }
+}
+
+Relations: {       # Column Family (Super, ByteType, ByteType)
+  <UserUUID>: {
+    followers: {
+      <UserUUID>: { added_at: <timestamp> },
+      <UserUUID>: { added_at: <timestamp> },
+      ...
+    },
+    followings: {
+    }
+  }
+}
+
+Feed: {
+  <FeedUUID>: {
+    <Timestamp>: {
+      body: "hoge"
+    }
+}
+
+UserTimeline: {       # Column Family(Standard)
+  <UserUUID+Type>: {      # Row Key (Type is "Timeline" or "My")
+    <Timestamp>: # Column Key
+      { feed: <FeedUUID>, body: "hoge" }
+  }
+}
